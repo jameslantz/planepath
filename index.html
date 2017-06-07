@@ -1,5 +1,5 @@
 <html>
-	<head> 
+	<head>
 		<title>PUBG Plane Path</title>
 		<script>
 		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -11,51 +11,49 @@
 		  ga('send', 'pageview');
 
 		</script>
-		<link rel="icon" 
-      type="image/png" 
+		<link rel="icon"
+      type="image/png"
       href="img/favicon.png">
 		<link rel="stylesheet" type="text/css" href="css/style.css">
 		<script src="js/math.js"></script>
 		<script src="js/main.js"></script>
 	</head>
 	<body>
-		<div id ="container">
-			<div id ="sndcontainer">
-				<div id="leftBar">
-					<div id="reset"></div>
-					<div id="calculating">Click and drag to begin</div>
-					<div id="error"></div>
-					<div id="legend">
-						<div class="legendline">
-							<div id="orangeblock"></div>
-							<div class="legendtext">= Likely chute path</div>
-						</div>
-						<div class="legendline">
-							<div id="blueblock"></div>
-							<div class="legendtext">= Potential chute path</div>
-						</div>
-						<div class="legendline">
-							<div id="car"><img src="img/car_small.png" width="24px" height="24px"></div>
-							<div class="legendtext">= High % vehicle</div>
-						</div>
+		<div id ="container" class="center">
+			<div id="leftBar">
+				<div id="reset"></div>
+				<div id="calculating">Click and drag to begin</div>
+				<div id="error"></div>
+				<div id="legend">
+					<div class="legendline">
+						<div id="orangeblock"></div>
+						<div class="legendtext">= Likely chute path</div>
 					</div>
-					<div id="gameclock"></div>
-					<div id="lowerclock"></div>
-					<div id="healthbarcontainer"></div>
-					<div id="circlecontainer">
-						<!-- <div class="activecircle"><div class="dps danger">15</div><div class="dpsfooter">DPS</div><div class="closetime">CLOSING! 00:53</div></div>
-						<div class="circle"><div class="dps danger">15</div><div class="dpsfooter">DPS</div><div class="closetime">CLOSING! 00:53</div></div>
-						<div class="circle"><div class="dps yield">5</div><div class="dpsfooter">DPS</div><div class="closetime">CLOSING! 00:53</div></div>
-						<div class="circle"><div class="dps">3</div><div class="dpsfooter">DPS</div><div class="closetime">CLOSING! 00:53</div></div>
-						<div class="circle"><div class="dps">1</div><div class="dpsfooter">DPS</div><div class="closetime">CLOSING! 00:53</div></div> -->
+					<div class="legendline">
+						<div id="blueblock"></div>
+						<div class="legendtext">= Potential chute path</div>
 					</div>
-					<div id="footer">Plane Path v0.11<br>made by James Lantz - <a href="contact.html">Contact</a></div>
+					<div class="legendline">
+						<div id="car"><img src="img/car_small.png" width="24px" height="24px"></div>
+						<div class="legendtext">= High % vehicle</div>
+					</div>
 				</div>
-				<!-- Canvas! -->
-				<div id="canvasContainer">
-					<canvas id="bgCanvas"></canvas>
-					<canvas id="mainCanvas"></canvas>
+				<div id="gameclock"></div>
+				<div id="lowerclock"></div>
+				<div id="healthbarcontainer"></div>
+				<div id="circlecontainer">
+					<!-- <div class="activecircle"><div class="dps danger">15</div><div class="dpsfooter">DPS</div><div class="closetime">CLOSING! 00:53</div></div>
+					<div class="circle"><div class="dps danger">15</div><div class="dpsfooter">DPS</div><div class="closetime">CLOSING! 00:53</div></div>
+					<div class="circle"><div class="dps yield">5</div><div class="dpsfooter">DPS</div><div class="closetime">CLOSING! 00:53</div></div>
+					<div class="circle"><div class="dps">3</div><div class="dpsfooter">DPS</div><div class="closetime">CLOSING! 00:53</div></div>
+					<div class="circle"><div class="dps">1</div><div class="dpsfooter">DPS</div><div class="closetime">CLOSING! 00:53</div></div> -->
 				</div>
+				<div id="footer">Plane Path v0.11<br>made by James Lantz - <a href="contact.html">Contact</a></div>
+			</div>
+			<!-- Canvas! -->
+			<div id="canvasContainer">
+				<canvas id="bgCanvas"></canvas>
+				<canvas id="mainCanvas"></canvas>
 			</div>
 		</div>
 	</body>

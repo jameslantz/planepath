@@ -8,38 +8,51 @@ a
 	color: white;
 }
 
-#container 
-{
-	min-width: 1024px;
-	width: 75%;
-	margin-left: auto;
-	margin-right: auto;
-	height: 96%;
+.center {
+    margin: auto;
+    width: 50%;
+    border: 3px solid green;
+    padding: 10px;
 }
 
-#sndcontainer
+#container
 {
-	margin-left:auto;
-	margin-right:auto;
+    /*min-width: 1024px;*/
+	width: 95%;
+	margin-left: auto;
+	margin-right: auto;
+	height: 95%;
 }
 
 #canvasContainer
 {
 	position: relative;
+    margin-left: 20%;
+    height: 100%;
+    width: 80%; // Remaining % from #leftBar width
 }
 
-#mainCanvas 
+
+
+
+#mainCanvas
 {
+    /*height: 100%;
+    width: 100%;*/
 	position: absolute;
 	top: 0px;
 	left: 0px;
+    border:1px solid ORANGE
 }
 
 #bgCanvas
 {
+    /*height: 100%;
+    width: 100%;*/
 	position: absolute;
 	top: 0px;
 	left: 0px;
+    border:1px solid RED
 }
 
 #leftBar
@@ -76,14 +89,14 @@ a
 	border: 4px solid #000000;
 }
 
-#calculating 
+#calculating
 {
 	margin-top: 10px;
 	/*display: none;*/
 	font-size: 20px;
 }
 
-#error 
+#error
 {
 	margin-top: 10px;
 	color: red;
@@ -108,7 +121,7 @@ a
 	height: 22px;
 }
 
-#orangeblock 
+#orangeblock
 {
 	float: left;
 	width: 22px;
@@ -118,7 +131,7 @@ a
 	margin-right: 5px;
 }
 
-#blueblock 
+#blueblock
 {
 	float: left;
 	width: 22px;
@@ -145,7 +158,7 @@ a
 	font-size: 1.2vh;
 }
 
-#car 
+#car
 {
 	float: left;
 	margin-top: 5px;
@@ -216,7 +229,7 @@ progress[value].veryhighhp::-webkit-progress-value  {
 	margin-left: auto;
 	margin-right: auto;
 	background-size: cover;
-	background-image: url("../img/circle.png");	
+	background-image: url("../img/circle.png");
 	border: 2px solid rgba(255, 200, 0, 1.0);
 
 	font-size: 3.3vh;
@@ -232,7 +245,7 @@ progress[value].veryhighhp::-webkit-progress-value  {
 	margin-left: auto;
 	margin-right: auto;
 	background-size: cover;
-	background-image: url("../img/circle_grey.png");	
+	background-image: url("../img/circle_grey.png");
 	font-size: 2.8vh;
 }
 
@@ -247,7 +260,7 @@ progress[value].veryhighhp::-webkit-progress-value  {
 	width: 20%;
 }
 
-.circle .dps 
+.circle .dps
 {
 	color: #CCC;
 }
@@ -297,7 +310,7 @@ progress[value].veryhighhp::-webkit-progress-value  {
 }
 
 /*
-fuck 3 aligns 
+fuck 3 aligns
 #rightBar
 {
 	height: 100%;
