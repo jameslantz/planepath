@@ -110,6 +110,7 @@ var clickStart = [0, 0];
 var clickEnd = [0, 0];
 
 var lastScaled = null;
+var lastResized = null;
 
 var bg = new Image();
 var bgLoaded = false;
@@ -188,7 +189,7 @@ function Reset(error = false, errorMsg = "") {
     }
 
     var legend = document.getElementById('legend');
-    legend.style.display = "none";
+    // legend.style.display = "none";
 
     var clock = document.getElementById('gameclock');
     clock.innerHTML = "";
@@ -249,16 +250,16 @@ function Resize(scale) {
     var ctx_main_canvas = main_canvas.getContext('2d');
     var ctx_bg_canvas = bg_canvas.getContext('2d');
 
-    var canvas_height = Math.min(canvas_container.offsetHeight,
+    canvas_container.style.height = "100%"; // Set height to 100% so the canvas_height_width is calculated properly
+
+    var canvas_height_width = Math.min(canvas_container.offsetHeight,
         canvas_container.offsetWidth);
-    var canvas_width = Math.min(canvas_container.offsetHeight, canvas_container
-        .offsetWidth);
 
-    ctx_main_canvas.canvas.height = canvas_height;
-    ctx_main_canvas.canvas.width = canvas_width;
+    ctx_main_canvas.canvas.height = canvas_height_width;
+    ctx_main_canvas.canvas.width = canvas_height_width;
 
-    ctx_bg_canvas.canvas.height = canvas_height;
-    ctx_bg_canvas.canvas.width = canvas_width;
+    ctx_bg_canvas.canvas.height = canvas_height_width;
+    ctx_bg_canvas.canvas.width = canvas_height_width;
 
     //
     // ctx_main_canvas.canvas.height = container.clientHeight;
@@ -294,9 +295,10 @@ function Resize(scale) {
     }
 
 
-    var canvascont = document.getElementById('canvasContainer');
-    container.style.marginTop = (window.innerHeight - container.clientHeight) /
-        2;
+    canvas_container.style.height = canvas_height_width;
+
+    // container.style.marginTop = (window.innerHeight - container.clientHeight) /
+    // 2;
     // canvascont.style.left = leftbar.clientWidth;
 }
 
