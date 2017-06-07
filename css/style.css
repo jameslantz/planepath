@@ -1,0 +1,306 @@
+body
+{
+	background-color: #333;
+}
+
+a
+{
+	color: white;
+}
+
+#container 
+{
+	min-width: 1024px;
+	width: 75%;
+	margin-left: auto;
+	margin-right: auto;
+	height: 96%;
+}
+
+#sndcontainer
+{
+	margin-left:auto;
+	margin-right:auto;
+}
+
+#canvasContainer
+{
+	position: relative;
+}
+
+#mainCanvas 
+{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}
+
+#bgCanvas
+{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}
+
+#leftBar
+{
+	position: relative;
+	float: left;
+	color: white;
+	width: 20%;
+	height: 100%;
+	text-align: center;
+}
+
+#contact
+{
+	color: white;
+	width: 50%;
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 18px;
+	text-align: center;
+	margin-top: 25%;
+}
+
+#reset
+{
+	margin-left: auto;
+	margin-right: auto;
+	width: 90%;
+	height: 10.5%;
+	cursor: pointer;
+	margin-bottom: 10px;
+	background-size: cover;
+	background-image: url("../img/resetbtn.png");
+	border: 4px solid #000000;
+}
+
+#calculating 
+{
+	margin-top: 10px;
+	/*display: none;*/
+	font-size: 20px;
+}
+
+#error 
+{
+	margin-top: 10px;
+	color: red;
+	font-size: 20px;
+}
+
+#legend
+{
+	font-size: 1.8vh;
+	display: none;
+	text-align: left;
+	width: 90%;
+	height: 15%;
+}
+
+.legendline
+{
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 8px;
+	width: 92%;
+	height: 22px;
+}
+
+#orangeblock 
+{
+	float: left;
+	width: 22px;
+	height: 22px;
+	border: 2px solid #000000;
+	background-color: rgba(255, 200, 0, 1.0);
+	margin-right: 5px;
+}
+
+#blueblock 
+{
+	float: left;
+	width: 22px;
+	height: 22px;
+	border: 2px solid #000000;
+	background-color: rgba(60, 100, 200, 1.0);
+	margin-right: 5px;
+}
+
+.legendtext
+{
+	padding-top: 6px;
+	height: 20px;
+}
+
+#gameclock
+{
+	margin-top: 15%;
+	font-size: 6.0vh;
+}
+
+#lowerclock
+{
+	font-size: 1.2vh;
+}
+
+#car 
+{
+	float: left;
+	margin-top: 5px;
+	margin-right: 5px;
+}
+
+#healthbar
+{
+	margin-top: 15%;
+	width: 90%;
+	height: 3.64%;
+}
+
+#healthtext
+{
+	margin-top: 3%;
+	margin-bottom: 10%;
+	font-size: 1.2vh
+}
+
+progress[value] {
+  /* Reset the default appearance */
+  -webkit-appearance: none;
+   appearance: none;
+}
+
+progress[value]::-webkit-progress-bar {
+  background-color: #000;
+  border: 1px solid #eee;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;
+}
+
+/*progress[value]::-webkit-progress-value {
+	background-color: #FFF;
+}*/
+
+progress[value].lowhp::-webkit-progress-value {
+	background-color: #FE0000;
+}
+
+progress[value].lowishhp::-webkit-progress-value  {
+	background-color: #d94545;
+}
+
+progress[value].medhp::-webkit-progress-value  {
+	background-color: #de756f;
+}
+
+progress[value].highhp::-webkit-progress-value  {
+	background-color: #e9a3a3;
+}
+
+progress[value].veryhighhp::-webkit-progress-value  {
+	background-color: #FFFFFF;
+}
+
+#circlecontainer
+{
+	margin-top: 10%;
+}
+
+.activecircle
+{
+	position: relative;
+	margin-top: 10px;
+	width: 90%;
+	height: 8.5%;
+	margin-left: auto;
+	margin-right: auto;
+	background-size: cover;
+	background-image: url("../img/circle.png");	
+	border: 2px solid rgba(255, 200, 0, 1.0);
+
+	font-size: 3.3vh;
+    font-weight: bold;
+}
+
+.circle
+{
+	position: relative;
+	margin-top: 10px;
+	width: 90%;
+	height: 8.5%;
+	margin-left: auto;
+	margin-right: auto;
+	background-size: cover;
+	background-image: url("../img/circle_grey.png");	
+	font-size: 2.8vh;
+}
+
+.dps
+{
+	position: absolute;
+	top: 5%;
+	left: 5%;
+	font-size: 155%;
+	font-weight: bold;
+	text-align: center;
+	width: 20%;
+}
+
+.circle .dps 
+{
+	color: #CCC;
+}
+
+.dpsfooter
+{
+	position: absolute;
+	top: 70%;
+	left: 5%;
+	font-size: 45%;
+	width: 20%;
+	text-align: center;
+}
+
+.closetime
+{
+	position: absolute;
+	top: 17%;
+	right: 5%;
+	font-size: 40%;
+	text-align: right;
+	width: 50%;
+}
+
+#footer
+{
+	position: absolute;
+	text-align: center;
+	bottom: 0%;
+	width: 100%;
+	font-size: 1.5vh;
+}
+
+.danger
+{
+
+}
+
+.yield
+{
+
+}
+
+#reset:active
+{
+	border: 4px solid #FFFFFF;
+}
+
+/*
+fuck 3 aligns 
+#rightBar
+{
+	height: 100%;
+	background-color: black;
+}
+*/
