@@ -551,7 +551,7 @@ function DrawPath(resizeDraw = false){
     pathSlope = slope; 
     pathB = b; 
 
-    UpdateLine();
+    UpdateLine(angle);
 
     animFrames = 0; 
     animStart = Date.now(); 
@@ -562,14 +562,17 @@ function DrawPath(resizeDraw = false){
     setTimeout(function(){CalcDists(resizeDraw)}, 1); 
 }
 
-function UpdateLine()
+function UpdateLine(angle)
 {
     var c = document.getElementById("mainCanvas");
     var ctx = c.getContext("2d");  
+    var midpoint;
 
     ctx.beginPath();
     ctx.moveTo(lineDraw1[0], lineDraw1[1]);
     ctx.lineTo(lineDraw2[0], lineDraw2[1]);
+    midpoint = FindMidpoint(lineDraw1, lineDraw2);
+    ctx.moveTo(midpoint[0], midpoint[1]);
 
     ctx.strokeStyle = '#000000';
     ctx.lineWidth = 8;
@@ -577,6 +580,20 @@ function UpdateLine()
     ctx.strokeStyle = '#FFFFFF';
     ctx.lineWidth = 6;
     ctx.stroke();
+}
+
+//finds the midpoint of 2 points
+//intended points should be the 2 ends of the line
+//not the users inputted points
+//but works eitheer way
+function FindMidpoint(coord1, coord2) 
+{
+    var midpoint = [];
+    var midpointX = (coord1[0] + coord2[0]) / 2;
+    var midpointY = (coord1[1] + coord2[1]) / 2;
+    midpoint[0] = midpointX;
+    midpoint[1] = midpointY;
+    return midpoint;
 }
 
 function HandleDown(event)
