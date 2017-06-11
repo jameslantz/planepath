@@ -546,33 +546,51 @@ function DrawPath(resizeDraw = false){
         }
     }
 
-    // console.log(lineDraw1, lineDraw2);
-
     pathSlope = slope; 
     pathB = b; 
 
-    UpdateLine(angle);
+    UpdateLine();
 
     animFrames = 0; 
     animStart = Date.now(); 
     currentIdx = 0; 
     currentX = 0; 
-    currentY = 0; 
+    currentY = 0;
 
-    setTimeout(function(){CalcDists(resizeDraw)}, 1); 
+    setTimeout(function(){CalcDists(resizeDraw)}, 1);
 }
 
-function UpdateLine(angle)
+function UpdateLine()
 {
     var c = document.getElementById("mainCanvas");
-    var ctx = c.getContext("2d");  
-    var midpoint;
+    var ctx = c.getContext("2d");
 
     ctx.beginPath();
     ctx.moveTo(lineDraw1[0], lineDraw1[1]);
     ctx.lineTo(lineDraw2[0], lineDraw2[1]);
-    midpoint = FindMidpoint(lineDraw1, lineDraw2);
+
+    ctx.strokeStyle = '#000000';
+    ctx.lineWidth = 8;
+    ctx.stroke();
+    ctx.strokeStyle = '#FFFFFF';
+    ctx.lineWidth = 6;
+    ctx.stroke();
+    DrawArrowDirection();
+}
+
+function DrawArrowDirection()
+{
+    var headlen = 10;
+    var c = document.getElementById("mainCanvas");
+    var ctx = c.getContext("2d");
+    var midpoint = FindMidpoint(lineDraw1, lineDraw2);
+
+    ctx.beginPath();
     ctx.moveTo(midpoint[0], midpoint[1]);
+    ctx.lineTo(midpoint[0]-headlen*Math.cos(lineAngle-Math.PI/7),midpoint[1]-headlen*Math.sin(lineAngle-Math.PI/7));
+    ctx.lineTo(midpoint[0]-headlen*Math.cos(lineAngle+Math.PI/7),midpoint[1]-headlen*Math.sin(lineAngle+Math.PI/7));
+    ctx.lineTo(midpoint[0], midpoint[1]);
+    ctx.lineTo(midpoint[0]-headlen*Math.cos(lineAngle-Math.PI/7),midpoint[1]-headlen*Math.sin(lineAngle-Math.PI/7));
 
     ctx.strokeStyle = '#000000';
     ctx.lineWidth = 8;
@@ -585,7 +603,7 @@ function UpdateLine(angle)
 //finds the midpoint of 2 points
 //intended points should be the 2 ends of the line
 //not the users inputted points
-//but works eitheer way
+//but works either way
 function FindMidpoint(coord1, coord2) 
 {
     var midpoint = [];
@@ -1195,7 +1213,7 @@ function PostPathUpdate(resizeDraw = false)
     ctx.lineWidth = lw2;
     ctx.stroke();
 
-    UpdateLine()
+    UpdateLine();
 
     for(x=0;x<CAR_POS.length;x++)
     {
