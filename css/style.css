@@ -8,38 +8,55 @@ a
 	color: white;
 }
 
-#container 
-{
-	min-width: 1024px;
-	width: 75%;
-	margin-left: auto;
-	margin-right: auto;
-	height: 96%;
+.center {
+    margin: auto;
+    width: 50%;
+    /*border: 3px solid green;*/
+    padding: 10px;
 }
 
-#sndcontainer
+#container
 {
-	margin-left:auto;
-	margin-right:auto;
+    /*min-width: 1024px;*/
+	width: 95%;
+	margin-left: auto;
+	margin-right: auto;
+	height: 95%;
 }
 
 #canvasContainer
 {
 	position: relative;
+    margin-left: 20%;
+    height: 100%;
+    width: 80%; // Remaining % from #leftBar width
 }
 
-#mainCanvas 
+
+#mainCanvas
 {
+    /*height: 100%;
+    width: 100%;*/
 	position: absolute;
 	top: 0px;
 	left: 0px;
+    /*border:1px solid ORANGE*/
 }
 
 #bgCanvas
 {
+    /*height: 100%;
+    width: 100%;*/
 	position: absolute;
 	top: 0px;
 	left: 0px;
+    /*border:1px solid RED*/
+}
+
+#rightBar
+{
+    width: 100%;
+    height: 100%;
 }
 
 #leftBar
@@ -50,6 +67,15 @@ a
 	width: 20%;
 	height: 100%;
 	text-align: center;
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+#leftBar > div
+{
+    flex-grow: 1;
 }
 
 #contact
@@ -65,38 +91,33 @@ a
 
 #reset
 {
-	margin-left: auto;
-	margin-right: auto;
-	width: 90%;
-	height: 10.5%;
-	cursor: pointer;
-	margin-bottom: 10px;
+    height: 100px;
 	background-size: cover;
 	background-image: url("../img/resetbtn.png");
 	border: 4px solid #000000;
+    order: 2;
 }
 
-#calculating 
+#calculating
 {
-	margin-top: 10px;
+	/*margin-top: 10px;
 	/*display: none;*/
-	font-size: 20px;
+	font-size: 20px;*/
+    order: 1;
 }
 
-#error 
+#error
 {
-	margin-top: 10px;
 	color: red;
 	font-size: 20px;
+    order: 3;
 }
 
 #legend
 {
-	font-size: 1.8vh;
 	display: none;
 	text-align: left;
-	width: 90%;
-	height: 15%;
+    order: 4;
 }
 
 .legendline
@@ -108,7 +129,7 @@ a
 	height: 22px;
 }
 
-#orangeblock 
+#orangeblock
 {
 	float: left;
 	width: 22px;
@@ -118,7 +139,7 @@ a
 	margin-right: 5px;
 }
 
-#blueblock 
+#blueblock
 {
 	float: left;
 	width: 22px;
@@ -134,35 +155,45 @@ a
 	height: 20px;
 }
 
+#clockWrapper
+{
+    order: 5;
+}
+
 #gameclock
 {
-	margin-top: 15%;
+	margin-top: 0.1em;
 	font-size: 6.0vh;
 }
 
 #lowerclock
 {
-	font-size: 1.2vh;
+	/*font-size: 1.2vh;*/
 }
 
-#car 
+#car
 {
 	float: left;
 	margin-top: 5px;
 	margin-right: 5px;
 }
 
+#healthbarcontainer
+{
+    order: 6;
+}
+
 #healthbar
 {
-	margin-top: 15%;
+	margin-top: 1em;
 	width: 90%;
 	height: 3.64%;
+    order: 7;
 }
 
 #healthtext
 {
-	margin-top: 3%;
-	margin-bottom: 10%;
+	margin-top: 1em;
 	font-size: 1.2vh
 }
 
@@ -204,19 +235,22 @@ progress[value].veryhighhp::-webkit-progress-value  {
 
 #circlecontainer
 {
-	margin-top: 10%;
+	/*margin-top: 10%;*/
+    order: 8;
+    display: flex;
+    flex-direction: column;
 }
 
 .activecircle
 {
 	position: relative;
-	margin-top: 10px;
+	/*margin-top: 10px;*/
 	width: 90%;
 	height: 8.5%;
 	margin-left: auto;
 	margin-right: auto;
 	background-size: cover;
-	background-image: url("../img/circle.png");	
+	background-image: url("../img/circle.png");
 	border: 2px solid rgba(255, 200, 0, 1.0);
 
 	font-size: 3.3vh;
@@ -226,13 +260,13 @@ progress[value].veryhighhp::-webkit-progress-value  {
 .circle
 {
 	position: relative;
-	margin-top: 10px;
+	/*margin-top: 10px;*/
 	width: 90%;
 	height: 8.5%;
 	margin-left: auto;
 	margin-right: auto;
 	background-size: cover;
-	background-image: url("../img/circle_grey.png");	
+	background-image: url("../img/circle_grey.png");
 	font-size: 2.8vh;
 }
 
@@ -247,7 +281,7 @@ progress[value].veryhighhp::-webkit-progress-value  {
 	width: 20%;
 }
 
-.circle .dps 
+.circle .dps
 {
 	color: #CCC;
 }
@@ -272,15 +306,6 @@ progress[value].veryhighhp::-webkit-progress-value  {
 	width: 50%;
 }
 
-#footer
-{
-	position: absolute;
-	text-align: center;
-	bottom: 0%;
-	width: 100%;
-	font-size: 1.5vh;
-}
-
 .danger
 {
 
@@ -297,10 +322,84 @@ progress[value].veryhighhp::-webkit-progress-value  {
 }
 
 /*
-fuck 3 aligns 
+fuck 3 aligns
 #rightBar
 {
 	height: 100%;
 	background-color: black;
 }
 */
+
+
+@media (max-width: 1200px) {
+  #container {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -moz-box-orient: vertical;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    /* optional */
+    -webkit-box-align: start;
+    -moz-box-align: start;
+    -ms-flex-align: start;
+    -webkit-align-items: flex-start;
+    align-items: flex-start;
+  }
+
+  #container #leftBar {
+    -webkit-box-ordinal-group: 2;
+    -moz-box-ordinal-group: 2;
+    -ms-flex-order: 2;
+    -webkit-order: 2;
+    order: 2;
+
+    height: initial;
+    width: 100%;
+    flex-direction: row;
+
+  }
+
+  #container #canvasContainer {
+    -webkit-box-ordinal-group: 1;
+    -moz-box-ordinal-group: 1;
+    -ms-flex-order: 1;
+    -webkit-order: 1;
+    order: 1;
+
+    width: 100%;
+    margin-left: 0px;
+
+  }
+
+  #leftBar > div
+  {
+      flex-basis: 20%;
+      margin: 1em;
+  }
+
+  #circlecontainer
+  {
+      flex-direction: row;
+      flex-basis: 100% ! important;
+  }
+
+  #footer
+  {
+
+      flex-basis: 100% ! important;
+  }
+
+}
+#footer
+{
+    order: 10;
+	text-align: center;
+	bottom: 0%;
+	/*width: 100%;*/
+	font-size: 1.5vh;
+}
