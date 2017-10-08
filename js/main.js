@@ -6,9 +6,9 @@ var CHUTE_DIST = [100, 165]; //early chute, late chute
 var CHUTE_1_COLOR = [255, 165, 0, 50];
 var CHUTE_2_COLOR = [15, 15, 200, 50];
 
-var FIRST_AID_TIME = 10.0; 
-
+var FIRST_AID_TIME = 10.0;
 var CAR_POS = [[119, 234], [174, 190], [164, 168], [261 , 201], [296, 207], [323, 206], [334, 219], [463, 185], [386, 168], [426, 426], [443, 435], [445, 450], [517, 227], [439, 339], [257, 288]];
+var MIL_POS = [[122, 214],[152, 205],[422, 285],[460, 278],[514, 253],[506, 340],[532, 327],[329, 464],[454, 447],[129, 461],[407, 92],[248, 124],[415, 468]];
 var CIRCLE_DEFS = [
     //{idx: 0, downtime: 1, uptime: 1, dps: 5},
     {idx: 1, downtime: 412, uptime: 300, dps: .5},
@@ -22,16 +22,16 @@ var CIRCLE_DEFS = [
     {idx: 9, downtime: 300, uptime: 15, dps: 11}
 ]
 
-//variables 
-var lastDown = new Date().getTime(); 
+//variables
+var lastDown = new Date().getTime();
 var dragging = false;
 var downEvent = null;
-var moveEvent = null;  
-var arrow = false; 
-var pathDone = false; 
-var postDone = false; 
+var moveEvent = null;
+var arrow = false;
+var pathDone = false;
+var postDone = false;
 var resizedDuringAnim = false;
-var lastResizeDraw = 0;  
+var lastResizeDraw = 0;
 
 var pathStart = [0, 0];
 var pathEnd = [0, 0];
@@ -41,58 +41,62 @@ var lineDraw2 = [0, 0];
 
 var linePts = [];
 var dists = [];
-var lineAngle = 0; 
+var lineAngle = 0;
 
 var animStart = 0;
-var animFrames = 0;  
+var animFrames = 0;
 
-var pathCanvasHeight = 0; 
-var pathCanvasWidth = 0; 
+var pathCanvasHeight = 0;
+var pathCanvasWidth = 0;
 
-var pathSlope = 0; 
-var pathB = 0; 
+var pathSlope = 0;
+var pathB = 0;
 
-var clicked = false; 
+var clicked = false;
 var clickStart = [0, 0];
 var clickEnd = [0, 0];
 
-var lastScaled = null; 
+var lastScaled = null;
 
 var bg = new Image();
-var bgLoaded = false; 
+var bgLoaded = false;
 bg.src = "img/4thres.jpg";
 
 var bgLines = new Image();
-var bgLinesLoaded = false; 
+var bgLinesLoaded = false;
 bgLines.src = "img/4thres_letterslines.jpg";
 
 var bgLetters = new Image();
-var bgLettersLoaded = false; 
+var bgLettersLoaded = false;
 bgLetters.src = "img/4thres_letters.jpg";
 
 var car = new Image();
-var carLoaded = false; 
+var carLoaded = false;
 car.src = "img/car_pin.png";
 
+var military = new Image();
+var milLoaded = false;
+military.src = "img/military_pin.png";
+
 var car_out = new Image();
-var carOutLoaded = false; 
+var carOutLoaded = false;
 car_out.src = "img/car_pin_outline.png";
 
 var car_out_blk = new Image();
-var carOutBlkLoaded = false; 
+var carOutBlkLoaded = false;
 car_out_blk.src = "img/car_pin_outline_blk.png";
 
 var car_out_org = new Image();
-var carOutOrgLoaded = false; 
+var carOutOrgLoaded = false;
 car_out_org.src = "img/car_pin_outline_org.png";
 
 var car_out_blue = new Image();
-var carOutBlueLoaded = false; 
+var carOutBlueLoaded = false;
 car_out_blue.src = "img/car_pin_outline_blue.png";
 
 var dirty = true
 
-var heat = null; 
+var heat = null;
 
 bg.onload = function()
 {
@@ -113,6 +117,11 @@ car.onload = function()
 {
     carLoaded = true;
 }
+military.onload = function()
+{
+    milLoaded = true;
+}
+
 
 car_out.onload = function()
 {
@@ -121,30 +130,30 @@ car_out.onload = function()
 
 function DebugTime()
 {
-    gameTime += 5 * SECONDS; 
+    gameTime += 5 * SECONDS;
 }
 
 function Reset(error = false, errorMsg = "")
 {
-	pathDone = false; 
-    postDone = false; 
-    clicked = false; 
+	pathDone = false;
+    postDone = false;
+    clicked = false;
 
     var calculating = document.getElementById('calculating');
-    calculating.style.display = "inline"; 
+    calculating.style.display = "inline";
 
     if(error == true)
     {
         var error = document.getElementById('error');
-        error.innerHTML = errorMsg; 
+        error.innerHTML = errorMsg;
     } else
     {
         var error = document.getElementById('error');
-        error.innerHTML = ""; 
+        error.innerHTML = "";
     }
 
     var legend = document.getElementById('legend');
-    legend.style.display = "none"; 
+    legend.style.display = "none";
 
     var clock = document.getElementById('gameclock');
     clock.innerHTML = "";
@@ -177,6 +186,28 @@ function DrawCars()
         }
         ctx2.drawImage(car, Math.floor(CAR_POS[x][0] * scaleFactor), Math.floor(CAR_POS[x][1] * scaleFactor), Math.floor(16 * scaleFactor), Math.floor(16 * scaleFactor));
     }
+    for(x=0;x<MIL_POS.length;x++)
+    {
+        if(carOutLoaded)
+        {
+            ctx2.drawImage(car_out_blk, Math.floor((MIL_POS[x][0] - 1) * scaleFactor), Math.floor((MIL_POS[x][1] - 1) * scaleFactor), Math.floor(18 * scaleFactor), Math.floor(18 * scaleFactor));
+        }
+        ctx2.drawImage(military, Math.floor(MIL_POS[x][0] * scaleFactor), Math.floor(MIL_POS[x][1] * scaleFactor), Math.floor(16 * scaleFactor), Math.floor(16 * scaleFactor));
+    }
+}
+function DrawMilitary()
+{
+    var canvas2 = document.getElementById('bgCanvas');
+    var ctx2 = canvas2.getContext('2d');
+    var scaleFactor = ctx2.canvas.height / STANDARD_SCALE;
+    for(x=0;x<MIL_POS.length;x++)
+    {
+        if(carOutLoaded)
+        {
+            ctx2.drawImage(car_out_blk, Math.floor((MIL_POS[x][0] - 1) * scaleFactor), Math.floor((MIL_POS[x][1] - 1) * scaleFactor), Math.floor(18 * scaleFactor), Math.floor(18 * scaleFactor));
+        }
+        ctx2.drawImage(military, Math.floor(MIL_POS[x][0] * scaleFactor), Math.floor(MIL_POS[x][1] * scaleFactor), Math.floor(16 * scaleFactor), Math.floor(16 * scaleFactor));
+    }
 }
 
 function DrawBGCanvas()
@@ -192,6 +223,7 @@ function DrawBGCanvas()
         ctx2.drawImage(bgLines, 0, 0, canvas2.width, canvas2.height);
     }
     DrawCars();
+    //DrawMilitary();
 }
 
 function Resize(scale) {
@@ -203,14 +235,14 @@ function Resize(scale) {
     var canvas2 = document.getElementById('bgCanvas');
     var ctx2 = canvas2.getContext('2d');
 
-    ctx.canvas.height = container.clientHeight; 
-    ctx.canvas.width = ctx.canvas.height; 
-    ctx2.canvas.height = container.clientHeight; 
-    ctx2.canvas.width = ctx2.canvas.height; 
+    ctx.canvas.height = container.clientHeight;
+    ctx.canvas.width = ctx.canvas.height;
+    ctx2.canvas.height = container.clientHeight;
+    ctx2.canvas.width = ctx2.canvas.height;
 
     if(scale)
     {
-        lastScaled = Date.now(); 
+        lastScaled = Date.now();
 
         if(bgLinesLoaded && carLoaded)
         {
@@ -219,7 +251,7 @@ function Resize(scale) {
 
         if(pathDone && !postDone)
         {
-            resizedDuringAnim = true; 
+            resizedDuringAnim = true;
         }
 
         if(pathDone)
@@ -229,8 +261,8 @@ function Resize(scale) {
             setTimeout(function(){
                 if(Date.now() >= lastScaled + 400 && Date.now() >= lastResizeDraw + 400)
                 {
-                    //Draw the path! 
-                    DrawPath(true); 
+                    //Draw the path!
+                    DrawPath(true);
                 }
             }, 500)
         }
@@ -239,11 +271,11 @@ function Resize(scale) {
 
 
     var canvascont = document.getElementById('canvasContainer');
-	container.style.marginTop = (window.innerHeight - container.clientHeight) / 2; 
+	container.style.marginTop = (window.innerHeight - container.clientHeight) / 2;
 	sndcontainer.style.width = (leftbar.clientWidth + ctx.canvas.width + 100);
-    canvascont.style.width = ctx.canvas.width; 
-    canvascont.style.height = ctx.canvas.height; 
-    canvascont.style.left = leftbar.clientWidth; 
+    canvascont.style.width = ctx.canvas.width;
+    canvascont.style.height = ctx.canvas.height;
+    canvascont.style.left = leftbar.clientWidth;
 }
 
 function Scale() {
@@ -254,19 +286,19 @@ function Scale() {
     var ctx = canvas.getContext('2d');
     var canvas2 = document.getElementById('bgCanvas');
     var ctx2 = canvas2.getContext('2d');
-    //ctx.canvas.height = container.clientHeight; 
-    //ctx.canvas.width = ctx.canvas.height; 
-    //ctx2.canvas.height = container.clientHeight; 
-    //ctx2.canvas.width = ctx2.canvas.height; 
+    //ctx.canvas.height = container.clientHeight;
+    //ctx.canvas.width = ctx.canvas.height;
+    //ctx2.canvas.height = container.clientHeight;
+    //ctx2.canvas.width = ctx2.canvas.height;
     var canvascont = document.getElementById('canvasContainer');
-    container.style.marginTop = (window.innerHeight - container.clientHeight) / 2; 
+    container.style.marginTop = (window.innerHeight - container.clientHeight) / 2;
     sndcontainer.style.width = (leftbar.clientWidth + ctx.canvas.width + 100);
-    canvascont.style.width = ctx.canvas.width; 
-    canvascont.style.height = ctx.canvas.height; 
-    canvascont.style.left = leftbar.clientWidth; 
+    canvascont.style.width = ctx.canvas.width;
+    canvascont.style.height = ctx.canvas.height;
+    canvascont.style.left = leftbar.clientWidth;
 }
 
-//lmao can you imagine being this much of a nerd that u know how this works 
+//lmao can you imagine being this much of a nerd that u know how this works
 function DrawArrow(fromx, fromy, tox, toy){
     //variables to be used when creating the arrow
     var c = document.getElementById("mainCanvas");
@@ -331,122 +363,122 @@ function getX(y, slope, b)
 function DrawPath(resizeDraw = false){
 
     var error = document.getElementById('error');
-    error.innerHTML = ""; 
-    
+    error.innerHTML = "";
+
     DrawBGCanvas();
 	var c = document.getElementById("mainCanvas");
-    var ctx = c.getContext("2d");  
+    var ctx = c.getContext("2d");
 
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
     var fromx = pathStart[0] * c.width / pathCanvasWidth;
     var fromy = pathStart[1] * c.height / pathCanvasHeight;
     var tox = pathEnd[0] * c.width / pathCanvasWidth;
-    var toy = pathEnd[1] * c.height / pathCanvasHeight;  
+    var toy = pathEnd[1] * c.height / pathCanvasHeight;
 
     var headlen = 10;
 
     var angle = Math.atan2(toy-fromy,tox-fromx);
-    lineAngle = angle; 
+    lineAngle = angle;
 
     var slopeNum = (toy - fromy);
     var slopeDenom = (tox - fromx);
-    var slope = slopeNum/slopeDenom; 
+    var slope = slopeNum/slopeDenom;
 
-    //y = mx+b 
-    //y = slope(x) + b 
-    //fromy = slope(fromx) + b 
+    //y = mx+b
+    //y = slope(x) + b
+    //fromy = slope(fromx) + b
     //b = fromy - slope(fromx)
-    var b = fromy - (slope*fromx); 
+    var b = fromy - (slope*fromx);
 
-    var foundPos = false; 
-    var foundNeg = false; 
+    var foundPos = false;
+    var foundNeg = false;
 
     var posPos = [0, 0];
     var negPos = [0, 0];
 
-    var x = fromx; 
-    var y = fromy; 
+    var x = fromx;
+    var y = fromy;
 
-    var idx = 0 
+    var idx = 0
 
-    // //Add pts while we go! 
+    // //Add pts while we go!
     // linePts = [];
 
     // while(foundPos == false)
     // {
-    // 	x = x * slopeDenom; 
-    // 	y = y * slopeNum; 
+    // 	x = x * slopeDenom;
+    // 	y = y * slopeNum;
 
     // 	if(x <= 0 || x >= c.width)
     // 	{
-    // 		foundPos = true; 
-    // 		posPos[0] = x; 
+    // 		foundPos = true;
+    // 		posPos[0] = x;
     // 		posPos[1] = getY(x, slope, b);
-    // 	} 
+    // 	}
     // 	else if(y <= 0 || y >= c.height)
     // 	{
-    // 		foundPos = true; 
-    // 		posPos[1] = y; 
+    // 		foundPos = true;
+    // 		posPos[1] = y;
     // 		posPos[0] = getX(y, slope, b);
     // 	}
 
-    //     idx++; 
+    //     idx++;
     //     if(idx >= 1000)
     //     {
     //         //bail out
-    //         foundPos = true; 
+    //         foundPos = true;
     //         posPos[0] = 1000;
-    //         posPos[1] = 1000; 
+    //         posPos[1] = 1000;
     //     }
     // }
 
-    // var x = fromx; 
-    // var y = fromy; 
+    // var x = fromx;
+    // var y = fromy;
 
-    // idx = 0 
+    // idx = 0
 
     // while(foundNeg == false)
     // {
-    // 	x = x * -1 * slopeDenom; 
-    // 	y = y * -1 * slopeNum; 
+    // 	x = x * -1 * slopeDenom;
+    // 	y = y * -1 * slopeNum;
 
     // 	if(x <= 0 || x >= c.width)
     // 	{
     // 		foundNeg = true;
-    // 		negPos[0] = x; 
+    // 		negPos[0] = x;
     // 		negPos[1] = getY(x, slope, b);
-    // 	} 
+    // 	}
     // 	else if(y <= 0 || y >= c.height)
     // 	{
-    // 		foundNeg = true; 
-    // 		negPos[1] = y; 
+    // 		foundNeg = true;
+    // 		negPos[1] = y;
     // 		negPos[0] = getX(y, slope, b);
     // 	}
 
-    //     idx++; 
+    //     idx++;
     //     if(idx >= 1000)
     //     {
-    //         //bail out 
-    //         foundNeg = true; 
-    //         negPos[0] = -1000; 
-    //         negPos[1] = -1000; 
+    //         //bail out
+    //         foundNeg = true;
+    //         negPos[0] = -1000;
+    //         negPos[1] = -1000;
     //     }
     // }
 
-    // var iterX = fromx; 
-    // var iterY = fromy; 
+    // var iterX = fromx;
+    // var iterY = fromy;
 
     // for(i=0; i<1000; i++)
     // {
     //     if(slope > 1)
     //     {
-    //         iterY = iterY + 1; 
+    //         iterY = iterY + 1;
     //         linePts.push([getX(iterY, slope, b), iterY]);
-    //     } 
+    //     }
     //     else
     //     {
-    //         iterX = iterX + 1; 
+    //         iterX = iterX + 1;
     //         linePts.push([iterX, getY(iterX, slope, b)]);
     //     }
     // }
@@ -456,15 +488,15 @@ function DrawPath(resizeDraw = false){
 
     //test intersections
 
-    var width = c.width; 
+    var width = c.width;
     var height = c.height;
 
     var intersect1 = null;
-    var intersect2 = null; 
-    var intersect3 = null; 
+    var intersect2 = null;
+    var intersect3 = null;
     var intersect4 = null;
 
-    var pt1 = [fromx, fromy]; 
+    var pt1 = [fromx, fromy];
     var pt2 = [tox, toy];
 
     if(slope < 0)
@@ -494,15 +526,15 @@ function DrawPath(resizeDraw = false){
     // console.log(intersect3);
     // console.log(intersect4);
 
-    var solved = 0; 
+    var solved = 0;
 
     if(intersect1 == null || intersect2 == null || intersect3 == null || intersect4 == null)
     {
-        Reset(true, "Invalid Path!"); 
-        return; 
+        Reset(true, "Invalid Path!");
+        return;
     }
 
-    if(intersect1[0] <= width + 1 && intersect1[0] >= -1) 
+    if(intersect1[0] <= width + 1 && intersect1[0] >= -1)
     {
         if(solved == 0)
         {
@@ -513,7 +545,7 @@ function DrawPath(resizeDraw = false){
         }
     }
 
-    if(intersect4[0] <= width + 1 && intersect4[0] >= -1) 
+    if(intersect4[0] <= width + 1 && intersect4[0] >= -1)
     {
         if(solved == 0)
         {
@@ -524,7 +556,7 @@ function DrawPath(resizeDraw = false){
         }
     }
 
-    if(intersect2[1] <= height + 1 && intersect2[1] >= -1) 
+    if(intersect2[1] <= height + 1 && intersect2[1] >= -1)
     {
         if(solved == 0)
         {
@@ -535,7 +567,7 @@ function DrawPath(resizeDraw = false){
         }
     }
 
-    if(intersect3[1] <= height + 1 && intersect3[1] >= -1) 
+    if(intersect3[1] <= height + 1 && intersect3[1] >= -1)
     {
         if(solved == 0)
         {
@@ -548,24 +580,24 @@ function DrawPath(resizeDraw = false){
 
     // console.log(lineDraw1, lineDraw2);
 
-    pathSlope = slope; 
-    pathB = b; 
+    pathSlope = slope;
+    pathB = b;
 
     UpdateLine();
 
-    animFrames = 0; 
-    animStart = Date.now(); 
-    currentIdx = 0; 
-    currentX = 0; 
-    currentY = 0; 
+    animFrames = 0;
+    animStart = Date.now();
+    currentIdx = 0;
+    currentX = 0;
+    currentY = 0;
 
-    setTimeout(function(){CalcDists(resizeDraw)}, 1); 
+    setTimeout(function(){CalcDists(resizeDraw)}, 1);
 }
 
 function UpdateLine()
 {
     var c = document.getElementById("mainCanvas");
-    var ctx = c.getContext("2d");  
+    var ctx = c.getContext("2d");
 
     ctx.beginPath();
     ctx.moveTo(lineDraw1[0], lineDraw1[1]);
@@ -588,11 +620,11 @@ function HandleDown(event)
 	if(arrow)
 	{
 		FinishPath(downEvent.offsetX, downEvent.offsetY, moveEvent.offsetX, moveEvent.offsetY)
-	} 
+	}
 	else if(!pathDone){
 		lastDown = new Date().getTime();
-		dragging = true 
-		downEvent = event; 
+		dragging = true
+		downEvent = event;
 	}
 }
 
@@ -601,11 +633,11 @@ function HandleMove(event)
 	//past X and without an up we're probably dragging
 	if(new Date().getTime() - lastDown > 20 && dragging && pathDone == false && clicked == false)
 	{
-		arrow = true; 
+		arrow = true;
 		document.body.style.cursor = "pointer";
-		moveEvent = event; 
-        //firefox hack 
-        offsetX = downEvent.offsetX; 
+		moveEvent = event;
+        //firefox hack
+        offsetX = downEvent.offsetX;
         offsetY = downEvent.offsetY;
         if(downEvent.offsetX == 0 && downEvent.offsetY == 0)
         {
@@ -622,8 +654,8 @@ function HandleUp(event)
 	//If arrow, do X
 	if(arrow)
 	{
-        //firefox hack 
-        offsetX = downEvent.offsetX; 
+        //firefox hack
+        offsetX = downEvent.offsetX;
         offsetY = downEvent.offsetY;
         if(downEvent.offsetX == 0 && downEvent.offsetY == 0)
         {
@@ -631,7 +663,7 @@ function HandleUp(event)
             offsetY = downEvent.layerY;
         }
 
-        offsetX2 = moveEvent.offsetX; 
+        offsetX2 = moveEvent.offsetX;
         offsetY2 = moveEvent.offsetY;
         if(moveEvent.offsetX == 0 && moveEvent.offsetY == 0)
         {
@@ -643,18 +675,18 @@ function HandleUp(event)
 	}
 	else if(clicked == false && !pathDone)
 	{
-		clicked = true; 
+		clicked = true;
 		clickStart[0] = event.offsetX;
 		clickStart[1] = event.offsetY;
         DrawClick(clickStart[0], clickStart[1]);
 	}
 	else if(clicked == true && !pathDone)
 	{
-		clicked = false; 
+		clicked = false;
 		FinishPath(clickStart[0], clickStart[1], event.offsetX, event.offsetY);
 	}
 
-	arrow = false 
+	arrow = false
 	dragging = false
 	document.body.style.cursor = "default";
 }
@@ -663,13 +695,13 @@ function FinishPath(startx, starty, tox, toy)
 {
 	var canvas = document.getElementById('mainCanvas');
 	var ctx = canvas.getContext('2d');
-	pathCanvasHeight = canvas.height; 
-	pathCanvasWidth = canvas.width; 
-	pathDone = true; 
-	pathStart[0] = startx; 
-	pathStart[1] = starty; 
+	pathCanvasHeight = canvas.height;
+	pathCanvasWidth = canvas.width;
+	pathDone = true;
+	pathStart[0] = startx;
+	pathStart[1] = starty;
 	pathEnd[0] = tox;
-	pathEnd[1] = toy; 
+	pathEnd[1] = toy;
 
     DrawPath();
 }
@@ -684,16 +716,16 @@ function distsqd(pt1, pt2)
 
 function distfromline(pt)
 {
-    var slope = 1 /pathSlope * -1;  
-    var pt1 = pt; 
-    var pt2 = [pt1[0] + 1, pt1[1] + slope]; 
+    var slope = 1 /pathSlope * -1;
+    var pt1 = pt;
+    var pt2 = [pt1[0] + 1, pt1[1] + slope];
 
     var intersect = math.intersect(pt1, pt2, lineDraw1, lineDraw2);
-    return distsqd(pt1, intersect); 
+    return distsqd(pt1, intersect);
 }
 
 //distance from closest point on a line using pythagorean theorem and congruency
-//this doesn't work! blurk  
+//this doesn't work! blurk
 // function distfromline(slope, lineb, pt, debug)
 // {
 //     var x1 = pt[0];
@@ -705,10 +737,10 @@ function distfromline(pt)
 //     var a = Math.abs(x1 - x2);
 //     var b = Math.abs(y1 - y2);
 
-//     //find the hypoteneuse 
+//     //find the hypoteneuse
 //     var c = Math.sqrt(a*a + b*b);
 
-//     //split in half 
+//     //split in half
 //     var d = c / 2;
 
 //     if(debug)
@@ -718,29 +750,29 @@ function distfromline(pt)
 //         console.log("lineb: " + lineb);
 //     }
 
-//     return d;  
+//     return d;
 // }
 
-var currentIdx = 0; 
-var currentX = 0; 
-var currentY = 0; 
-var gameTime = 0; 
+var currentIdx = 0;
+var currentX = 0;
+var currentY = 0;
+var gameTime = 0;
 
 function RunGameTime()
 {
     if(pathDone)
     {
-        var dt = Date.now() - lastUpdateTimer; 
+        var dt = Date.now() - lastUpdateTimer;
         lastUpdateTimer = Date.now()
         var clock = document.getElementById('gameclock');
-        var m = 0; 
+        var m = 0;
         var s = 0;
         gameTime += dt
         var displayTime = Math.floor(gameTime / SECONDS);
         //123 = 01:03
-        s = displayTime % 60; 
+        s = displayTime % 60;
         m = (displayTime - s) / 60;
-        var str = ""; 
+        var str = "";
         if(m < 10)
         {
             str = str + "0";
@@ -771,7 +803,7 @@ function StartCircles()
     if(pathDone)
     {
         var circlecont = document.getElementById('circlecontainer');
-        var addTime = 0; 
+        var addTime = 0;
 
         //deep copy
         circles = JSON.parse(JSON.stringify(CIRCLE_DEFS));
@@ -779,11 +811,11 @@ function StartCircles()
         for(n=0;n<circles.length;n++)
         {
             var circle = circles[n];
-            circle.downtime = circle.downtime * SECONDS; 
+            circle.downtime = circle.downtime * SECONDS;
             circle.uptime = circle.uptime * SECONDS;
             addTime += circle.downtime;
             circle.add_downtime = addTime;
-            addTime += circle.uptime; 
+            addTime += circle.uptime;
             circle.add_uptime = addTime;
         }
 
@@ -809,8 +841,8 @@ function DisplayCircles()
     {
         var str = ""
         var circleclass = i == 0 ? "activecircle" : "circle";
-        var dps = circles[i].dps.toString().replace(/^0+/, ''); 
-        //var closing = circles[i].downtime > 0 ? "WAITING " : "CLOSING! "; 
+        var dps = circles[i].dps.toString().replace(/^0+/, '');
+        //var closing = circles[i].downtime > 0 ? "WAITING " : "CLOSING! ";
         var phrases = ["SAFE: ", "CLOSE: "];
         // var timestr = "";
         // var time = circles[i].downtime > 0 ? circles[i].downtime : circles[i].uptime;
@@ -822,7 +854,7 @@ function DisplayCircles()
             var timestr = "";
             var time = times[n]
             var displayTime = Math.floor(time / SECONDS);
-            var s = displayTime % 60; 
+            var s = displayTime % 60;
             var m = (displayTime - s) / 60;
             timestr = timestr + m.toString() + ":";
             if(s < 10)
@@ -880,8 +912,8 @@ function UpdateHealth()
     }
 }
 
-var lastUpdateCircles = 0; 
-var lastUpdateTimer = 0; 
+var lastUpdateCircles = 0;
+var lastUpdateTimer = 0;
 
 function RunCircles()
 {
@@ -898,17 +930,17 @@ function RunCircles()
 
             if(circles[i].downtime > 0)
             {
-                circles[i].downtime -= dt; 
+                circles[i].downtime -= dt;
             } else
             {
-                circles[i].uptime -= dt; 
+                circles[i].uptime -= dt;
             }
 
             // var time = circles[i].downtime > 0 ? circles[i].downtime : circles[i].uptime;
             // var displayTime = Math.floor(time / SECONDS)
             // var closing = circles[i].downtime > 0 ? "WAIT " : "CLOSE ";
             // var timestr = "";
-            // var s = displayTime % 60; 
+            // var s = displayTime % 60;
             // var m = (displayTime - s) / 60;
             // if(m < 10)
             // {
@@ -935,7 +967,7 @@ function RunCircles()
                 var canvas = document.getElementById('mainCanvas');
                 var ctx = canvas.getContext('2d');
 
-                var height = ctx.canvas.height; 
+                var height = ctx.canvas.height;
 
                 //ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
@@ -953,7 +985,7 @@ function RunCircles()
 function CircleAnim(els, a_time, animDate, pos, scaleFactor)
 {
     var step = a_time / 5;
-    var distance = 70 * scaleFactor; 
+    var distance = 70 * scaleFactor;
     var delta = distance/step;
 
     var active_el = document.getElementsByClassName('activecircle')[0];
@@ -965,7 +997,7 @@ function CircleAnim(els, a_time, animDate, pos, scaleFactor)
 
     if(Date.now() - animDate > a_time)
     {
-        return 
+        return
     }
 
     pos = pos - delta;
@@ -974,11 +1006,11 @@ function CircleAnim(els, a_time, animDate, pos, scaleFactor)
     for(idx=0;idx<els.length;idx++)
     {
         var a_el = els[idx];
-        a_el.style.top = (displaypos).toString() + "px"; 
+        a_el.style.top = (displaypos).toString() + "px";
     }
 
 
-    active_el.style.opacity = active_el.style.opacity - 0.01; 
+    active_el.style.opacity = active_el.style.opacity - 0.01;
 
     setTimeout(function(){CircleAnim(els, a_time, animDate, pos, scaleFactor)}, 5);
 }
@@ -993,10 +1025,10 @@ function CalcDists(resizeDraw)
             var ctx = canvas.getContext('2d');
 
             var calculating = document.getElementById('calculating');
-            calculating.style.display = "none"; 
+            calculating.style.display = "none";
 
             var legend = document.getElementById('legend');
-            legend.style.display = "inline"; 
+            legend.style.display = "inline";
 
             var clock = document.getElementById('gameclock');
             clock.innerHTML = "00:00";
@@ -1004,7 +1036,7 @@ function CalcDists(resizeDraw)
             var clock2 = document.getElementById('lowerclock');
             clock2.innerHTML = "APPROX. GAME TIME";
 
-            gameTime = 0; 
+            gameTime = 0;
             lastUpdateTimer = Date.now();
 
             setTimeout(function(){RunGameTime();},1000);
@@ -1012,8 +1044,8 @@ function CalcDists(resizeDraw)
             StartCircles();
         }
 
-        // var height = ctx.canvas.height; 
-        // var width = ctx.canvas.width; 
+        // var height = ctx.canvas.height;
+        // var width = ctx.canvas.width;
 
         // var i = 0;
         // dists = [];
@@ -1027,14 +1059,14 @@ function CalcDists(resizeDraw)
         //     }
         // }
 
-        animStart = Date.now(); 
-        animFrames = 0; 
+        animStart = Date.now();
+        animFrames = 0;
 
         if(resizedDuringAnim == false)
         {
             PostPathUpdate();
         }
-        
+
         if(resizeDraw == true)
         {
             resizedDuringAnim = false;
@@ -1043,18 +1075,18 @@ function CalcDists(resizeDraw)
     }
 }
 
-var lastDistLimit = 0; 
+var lastDistLimit = 0;
 
 function PostPathUpdate(resizeDraw = false)
 {
     if(animFrames == 0)
     {
-        lastDistLimit = 0; 
+        lastDistLimit = 0;
     }
 
     if(!pathDone)
     {
-        return; 
+        return;
     }
 
     if(resizedDuringAnim == true)
@@ -1062,34 +1094,34 @@ function PostPathUpdate(resizeDraw = false)
         return;
     }
 
-    var slope = pathSlope; 
-    var b = pathB; 
+    var slope = pathSlope;
+    var b = pathB;
     var t = Date.now() - animStart;
 
     if(resizeDraw == true)
     {
-        lastDistLimit = 0; 
-        t = 3500; 
-        lastResizeDraw = Date.now(); 
+        lastDistLimit = 0;
+        t = 3500;
+        lastResizeDraw = Date.now();
     }
 
     var canvas = document.getElementById('mainCanvas');
     var ctx = canvas.getContext('2d');
 
-    var height = ctx.canvas.height; 
-    var width = ctx.canvas.width; 
+    var height = ctx.canvas.height;
+    var width = ctx.canvas.width;
 
     //ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
     var scaleFactor = height / STANDARD_SCALE;
 
-    //what distance should we display? 1 distance unit every 10ms 
+    //what distance should we display? 1 distance unit every 10ms
     distLimit = Math.floor(t / 10) * scaleFactor;
 
     var c1 = CHUTE_1_COLOR;
     var c2 = CHUTE_2_COLOR;
 
-    var idx = 0; 
+    var idx = 0;
     // for(x=0;x<=width;x++)
     // {
     //     for(y=0;y<=height;y++)
@@ -1116,7 +1148,7 @@ function PostPathUpdate(resizeDraw = false)
     if(newEnd1[0] > -.1 && newEnd1[0] < .1)
     {
         newEnd1 = math.intersect(newEnd1, newEnd2, [-200, 0], [-200, height + 200]);
-    } 
+    }
     if(newEnd1[0] > width - 1 && newEnd1[0] < width + 1)
     {
         newEnd1 = math.intersect(newEnd1, newEnd2, [width + 200, 0], [width + 200, height + 200]);
@@ -1133,7 +1165,7 @@ function PostPathUpdate(resizeDraw = false)
     if(newEnd2[0] > -.1 && newEnd2[0] < .1)
     {
         newEnd2 = math.intersect(newEnd1, newEnd2, [-200, 0], [-200, height + 200]);
-    } 
+    }
     if(newEnd2[0] > width - 1 && newEnd2[0] < width + 1)
     {
         newEnd2 = math.intersect(newEnd1, newEnd2, [width + 200, 0], [width + 200, height + 200]);
@@ -1147,7 +1179,7 @@ function PostPathUpdate(resizeDraw = false)
         newEnd2 = math.intersect(newEnd1, newEnd2, [0, height + 200], [width + 200, height + 200]);
     }
 
-    var lw_og = Math.floor(t/10) * scaleFactor * 2; 
+    var lw_og = Math.floor(t/10) * scaleFactor * 2;
     var lw1 = lw_og;
     var lw2 = lw_og
 
@@ -1182,14 +1214,14 @@ function PostPathUpdate(resizeDraw = false)
 
     for(x=0;x<CAR_POS.length;x++)
     {
-        var pos = CAR_POS[x]; 
-        var posX = pos[0] * scaleFactor; 
+        var pos = CAR_POS[x];
+        var posX = pos[0] * scaleFactor;
         var posY = pos[1] * scaleFactor;
         var dist = distfromline([posX, posY]);
         if(dist <= distLimit && dist > lastDistLimit)
         {
             var canvas2 = document.getElementById('bgCanvas');
-            var ctx2 = canvas2.getContext('2d'); 
+            var ctx2 = canvas2.getContext('2d');
 
             if(dist <= CHUTE_DIST[0] * scaleFactor + 5)
             {
@@ -1204,12 +1236,12 @@ function PostPathUpdate(resizeDraw = false)
         }
     }
 
-    lastDistLimit = distLimit; 
+    lastDistLimit = distLimit;
 
     //1.5 seconds of animation = entire screen accounted for (unecessarily)
     if(t >= 3000)
     {
-        postDone = true; 
+        postDone = true;
     }
 
     // if(lastDistLimit <= 10)
@@ -1266,7 +1298,7 @@ window.mobilecheck = function() {
   return check;
 };
 
-window.onload = function() 
+window.onload = function()
 {
 	Resize(false);
     var canvas = document.getElementById('mainCanvas');
@@ -1294,4 +1326,4 @@ window.onload = function()
     }
 
 	// Update();
-} 
+}
